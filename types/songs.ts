@@ -6,4 +6,4 @@ export type TCoverSong = {
   published_date: string | null;
 };
 
-export type SongRow = Database['public']['Tables']['songs']['Row'][];
+export type SongRow = Database['public']['Tables']['songs']['Row'];

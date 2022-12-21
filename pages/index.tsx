@@ -1,10 +1,10 @@
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 
 import g from '@/styles/grid.module.css';
-import { DayCard } from '@/components/day-card';
-import dbClient from '@/data/dbClient';
-import { DECEMBER_LENGTH } from '@/utils/constants';
-import type { TCoverSong } from '@/types/songs';
+import dbClient from 'data/dbClient';
+import { TCoverSong } from 'types/songs';
+import { DECEMBER_LENGTH } from 'utils/constants';
+import { DayCard } from 'components/day-card';
 
 type HomePageProps = {
   songPerDay: TCoverSong[];

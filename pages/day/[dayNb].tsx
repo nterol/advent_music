@@ -1,9 +1,9 @@
+import dbClient from 'data/dbClient';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import dbClient from '@/data/dbClient';
-import { SongRow } from '@/types/songs';
+import { SongRow } from '../../types/songs';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const getDays = (year: number, month: number) => {
@@ -19,7 +19,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-type DayPageProps = { songs: SongRow };
+type DayPageProps = { songs: SongRow[] };
 
 export const getStaticProps: GetStaticProps<DayPageProps> = async ({ params }) => {
   const { dayNb } = params ?? {};
@@ -29,14 +29,15 @@ export const getStaticProps: GetStaticProps<DayPageProps> = async ({ params }) =
   const nextDate = new Date(`December ${nextDayNb ? nextDayNb : 1}, 2022`).toISOString();
   console.log({ pageDate, nextDate });
 
-  const { data, error } =
-    (await dbClient?.from('songs').select().gte('published_date', pageDate).lt('published_date', nextDate)) ?? {};
+  const res = await dbClient?.from('songs').select().gte('published_date', pageDate).lt('published_date', nextDate);
+
+  const { data, error } = res ?? {};
 
   if (error || !data) {
-    return { redirect: '/', props: { caca: true } };
+    return { props: { songs: [] } };
   }
 
-  return { props: { songs: data }, revalidate: false };
+  return { props: { songs: data }, revalidate: 3600 };
 };
 
 export default function DayPage({ songs }: InferGetStaticPropsType<typeof getStaticProps>) {
@@ -49,12 +50,12 @@ export default function DayPage({ songs }: InferGetStaticPropsType<typeof getSta
         </span>
       </Link>
       {songs.map((song) => (
-        <article className="rounded-lg bg-white shadow-lg p-2 flex w-full min-w-[640px]">
+        <article className="rounded-lg bg-white shadow-lg p-2 flex xs:flex-col md:flex-row w-full">
           <div className="min-h-[320px] min-w-[320px] bg-slate-300 rounded-sm overflow-hidden">
             {song.cover_url ? <Image src={song.cover_url} alt={song.name ?? ''} width={320} height={320} /> : null}
           </div>
-          <section className="flex flex-col gap-2">
-            <h2 className="">{song.name ?? 'Default Title'}</h2>
+          <section className="flex flex-col gap-2 p-4 justify-center w-full">
+            <h2 className="text-black text-2xl font-bold">{song.name ?? 'Default Title'}</h2>
             <p></p>
           </section>
         </article>

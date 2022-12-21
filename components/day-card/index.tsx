@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import type { TCoverSong } from '@/types/songs';
+
+import type { TCoverSong } from '../../types/songs';
 
 type DayCardProps = {
   index: number;
@@ -26,16 +27,16 @@ export function DayCard({ index, song }: DayCardProps) {
             />
           </div>
         ) : null}
-        <section className="w-full pointer-events-none flex flex-col items-end text-6xl font-bold text-white z-10">
+        <section className="w-full pointer-events-none flex flex-col items-end text-5xl font-bold text-white z-10  mix-blend-difference">
           <h2>{c.toUpperCase() + rest.join('')}</h2>
-          <span
+          <p
             className={[
-              'w-fit block font-bold',
-              today === index ? 'text-green-300' : today > index ? 'text-slate-500' : 'text-slate-900',
+              'font-bold',
+              today === index ? 'text-purple-500' : today > index ? 'text-white' : 'text-slate-200',
             ].join(' ')}
           >
             {index}
-          </span>
+          </p>
         </section>
       </article>
     </Link>

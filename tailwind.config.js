@@ -4,6 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: { 'dark-page': '#121212' },
+      screens: { xs: '300px' },
     },
   },
   plugins: [],
