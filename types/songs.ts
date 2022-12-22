@@ -7,3 +7,7 @@ export type TCoverSong = {
 };
 
 export type SongRow = Database['public']['Tables']['songs']['Row'];
+
+export type ForeignUser = {
+  users?: ({ id: string; name: string | null } | null) | { id: string; name: string | null }[] | undefined;
+};
