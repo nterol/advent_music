@@ -15,7 +15,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: Array.from({ length: nbOfDays }, (_, i) => ({
       params: { dayNb: `${i + 1}` },
     })),
-    fallback: true,
+    fallback: false,
   };
 };
 
@@ -23,18 +23,21 @@ type DayPageProps = { songs: SongRow[] };
 
 export const getStaticProps: GetStaticProps<DayPageProps> = async ({ params }) => {
   const { dayNb } = params ?? {};
-  if (!dayNb) return { redirect: '/', props: {} };
+
+  if (!dayNb) {
+    return { notFound: true };
+  }
+
   const pageDate = new Date(`December ${dayNb}, 2022`).toISOString();
   const nextDayNb = (Number(dayNb) + 1) % 31;
   const nextDate = new Date(`December ${nextDayNb ? nextDayNb : 1}, 2022`).toISOString();
-  console.log({ pageDate, nextDate });
 
   const res = await dbClient?.from('songs').select().gte('published_date', pageDate).lt('published_date', nextDate);
 
   const { data, error } = res ?? {};
 
   if (error || !data) {
-    return { props: { songs: [] } };
+    return { notFound: true };
   }
 
   return { props: { songs: data }, revalidate: 3600 };
