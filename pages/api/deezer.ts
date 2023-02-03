@@ -10,7 +10,6 @@ export default async function deezerHandler(req: NextApiRequest, res: NextApiRes
   const { artistName, trackName } = JSON.parse(body);
   try {
     const urlSearch = `https://api.deezer.com/search?q=artist:"${artistName}"track:"${trackName}"`;
-    console.log(urlSearch);
 
     const raw = await fetch(urlSearch, {
       method: 'GET',
@@ -20,8 +19,6 @@ export default async function deezerHandler(req: NextApiRequest, res: NextApiRes
       },
     });
     const serverAns = await raw.json();
-
-    console.log({ serverAns });
 
     res.status(200).json({
       link: serverAns.data?.[0]?.link ?? 'not found',

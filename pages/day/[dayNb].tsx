@@ -43,7 +43,6 @@ export const getStaticProps: GetStaticProps<DayPageProps> = async ({ params }) =
 
   const { data, error } = res ?? {};
 
-  console.log(JSON.stringify(data));
   if (error || !data) {
     return { notFound: true };
   }
